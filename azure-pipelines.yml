@@ -1,0 +1,19 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: |
+      cd api-service
+      docker build -t api-service .
+    displayName: 'Build API Docker image'
+
+  - script: |
+      docker run -d -p 8000:8000 --name api-test api-service
+      sleep 5
+      curl --fail http://127.0.0.1:8000/ || exit 1
+      docker stop api-test
+      docker rm api-test
+    displayName: 'Smoke test API container'
