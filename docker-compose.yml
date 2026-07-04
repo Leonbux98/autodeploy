@@ -1,0 +1,16 @@
+services:
+  api:
+    build: ./api-service
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: ./worker-service
+
+  frontend:
+    build: ./frontend-service
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
