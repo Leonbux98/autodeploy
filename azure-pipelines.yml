@@ -17,3 +17,16 @@ steps:
       docker stop api-test
       docker rm api-test
     displayName: 'Smoke test API container'
+
+  - task: Docker@2
+    displayName: 'Push image to ACR'
+    inputs:
+      containerRegistry: 'acr-connection'
+      repository: 'api-service'
+      command: 'buildAndPush'
+      Dockerfile: 'api-service/Dockerfile'
+      buildContext: 'api-service'
+      tags: |
+        $(Build.BuildId)
+        latest
+
